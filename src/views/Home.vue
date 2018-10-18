@@ -29,7 +29,7 @@ export default {
         let hangroom = database.ref('room/' + self.room)
         hangroom.once('value', function (snapshot) {
           let result = snapshot.val()
-          console.log('check before add room', result)
+          console.log('check room', result)
           if (!result) {
             database
               .ref('room/' + self.room)
