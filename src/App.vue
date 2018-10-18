@@ -9,13 +9,13 @@
           <line v-if="strikes > 2" x1="100" y1="40" x2="230" y2="40" style="stroke:yellow;fill:none;stroke-width:2px;" />
           <line v-if="strikes > 3" x1="100" y1="80" x2="130" y2="40" style="stroke:yellow;fill:none;stroke-width:2px;" />
           <line v-if="strikes > 4" x1="230" y1="40" x2="230" y2="80" style="stroke:yellow;fill:none;stroke-width:2px;" />
-          <circle v-if="strikes > 5" cx="230" cy="90" style="fill:khaki;stroke:yellow;stroke-width:2px;" r="20" />
-          <image v-if="strikes > 5" xlink:href="https://media.licdn.com/dms/image/C4E03AQHLK8kC6ceSYQ/profile-displayphoto-shrink_200_200/0?e=1544659200&v=beta&t=bKZpb0TgxAaCc3viiSL6ihNwdZtM3SFEfvA98s1k7RA" x="205" y="65" height="50px" width="50px"/>
-          <line v-if="strikes > 6" x1="230" y1="110" x2="230" y2="170" style="stroke:yellow;fill:none;stroke-width:2px;" />
-          <line v-if="strikes > 7" x1="230" y1="140" x2="250" y2="120" style="stroke:yellow;fill:none;stroke-width:2px;" />
-          <line v-if="strikes > 8" x1="230" y1="140" x2="210" y2="120" style="stroke:yellow;fill:none;stroke-width:2px;" />
-          <line v-if="strikes > 9" x1="230" y1="170" x2="250" y2="200" style="stroke:yellow;fill:none;stroke-width:2px;" />
-          <line v-if="strikes > 10" x1="230" y1="170" x2="210" y2="200" style="stroke:yellow;fill:none;stroke-width:2px;" />
+          <image v-if="strikes > 5 && strikes < 11" xlink:href="https://images-na.ssl-images-amazon.com/images/I/61PXzOSh0OL._SL1397_.jpg" x="205" y="65" height="50px" width="50px"/>
+          <line v-if="strikes > 6" x1="230" y1="110" x2="230" y2="170" style="stroke:white;fill:none;stroke-width:4px;" />
+          <line v-if="strikes > 7" x1="230" y1="140" x2="250" y2="160" style="stroke:white;fill:none;stroke-width:2px;" />
+          <line v-if="strikes > 8" x1="230" y1="140" x2="210" y2="160" style="stroke:white;fill:none;stroke-width:2px;" />
+          <line v-if="strikes > 9" x1="230" y1="170" x2="250" y2="220" style="stroke:darkblue;fill:none;stroke-width:2px;" />
+          <line v-if="strikes > 10" x1="230" y1="170" x2="210" y2="220" style="stroke:darkblue;fill:none;stroke-width:2px;" />
+          <text x="240" y="135" class="small" v-if="strikes > 6">It's Me..</text>
         </svg>
         <div>
           <div class="letter" v-for="letter in wordDisplayLetters">
