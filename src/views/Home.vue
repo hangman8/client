@@ -1,18 +1,50 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="col-md-4">
+      <input class="form-control form-control-lg" type="text" placeholder="Room" v-model="room">
+      <button @click="setRoom">Check Button</button>
+    </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import database from '../assets/config'
 
 export default {
   name: 'home',
-  components: {
-    HelloWorld
+  data () {
+    return {
+      room: ''
+    }
+  },
+  methods: {
+    // starCountRef.once('value', function (snapshot) {
+    setRoom () {
+      let self = this
+      console.log('masuk set room')
+      localStorage.setItem('room', this.room)
+      if (this.room) {
+        let hangroom = database.ref('room/' + this.room)
+        hangroom.once('value', function (snapshot) {
+          console.log('check before add room', snapshot.val())
+          if (!snapshot.val()) {
+            database.ref('room/' + self.room).set({
+              name: self.room
+            })
+              .then(response => {
+                self.room = ''
+              })
+          }
+          self.$router.push('login')
+        })
+      }
+    }
   }
 }
 </script>
+
+<style scoped>
+button {
+  width: 100px;
+}
+</style>
