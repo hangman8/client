@@ -10,6 +10,7 @@
           <line v-if="strikes > 3" x1="100" y1="80" x2="130" y2="40" style="stroke:yellow;fill:none;stroke-width:2px;" />
           <line v-if="strikes > 4" x1="230" y1="40" x2="230" y2="80" style="stroke:yellow;fill:none;stroke-width:2px;" />
           <circle v-if="strikes > 5" cx="230" cy="90" style="fill:khaki;stroke:yellow;stroke-width:2px;" r="20" />
+          <image v-if="strikes > 5" xlink:href="https://media.licdn.com/dms/image/C4E03AQHLK8kC6ceSYQ/profile-displayphoto-shrink_200_200/0?e=1544659200&v=beta&t=bKZpb0TgxAaCc3viiSL6ihNwdZtM3SFEfvA98s1k7RA" x="205" y="65" height="50px" width="50px"/>
           <line v-if="strikes > 6" x1="230" y1="110" x2="230" y2="170" style="stroke:yellow;fill:none;stroke-width:2px;" />
           <line v-if="strikes > 7" x1="230" y1="140" x2="250" y2="120" style="stroke:yellow;fill:none;stroke-width:2px;" />
           <line v-if="strikes > 8" x1="230" y1="140" x2="210" y2="120" style="stroke:yellow;fill:none;stroke-width:2px;" />
