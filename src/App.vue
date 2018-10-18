@@ -17,23 +17,23 @@
           <line v-if="strikes > 10" x1="230" y1="170" x2="210" y2="200" style="stroke:yellow;fill:none;stroke-width:2px;" />
         </svg>
         <div>
-          <div class="letter" v-for="letter in wordDisplayLetters">
+          <div class="letter" v-for="(letter,index) in wordDisplayLetters" :key="index">
             {{letter}}
           </div>
         </div>
         <template v-if="initialized">
           <div>
-            <div @click="tryLetter(letter)" class="possibleLetter" :class="getStrikethroughClass(letter)" v-for="letter in possibleLetters1">
+            <div @click="tryLetter(letter)" class="possibleLetter" :class="getStrikethroughClass(letter)" v-for="(letter,index) in possibleLetters1" :key="index">
               {{letter}}
             </div>
           </div>
           <div>
-            <div @click="tryLetter(letter)" class="possibleLetter" :class="getStrikethroughClass(letter)" v-for="letter in possibleLetters2">
+            <div @click="tryLetter(letter)" class="possibleLetter" :class="getStrikethroughClass(letter)" v-for="(letter,index) in possibleLetters2" :key="index">
               {{letter}}
             </div>
           </div>
           <div>
-            <div @click="tryLetter(letter)" class="possibleLetter" :class="getStrikethroughClass(letter)" v-for="letter in possibleLetters3">
+            <div @click="tryLetter(letter)" class="possibleLetter" :class="getStrikethroughClass(letter)" v-for="(letter,index) in possibleLetters3" :key="index">
               {{letter}}
             </div>
           </div>
@@ -199,13 +199,23 @@
 </script>
 
 <style>
-  #app {
-    text-align: center;
-    
-  }
-  .hints {
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+
+.hints {
     color: whitesmoke;
-  }
+}
 
 .letter {
   display: inline-block;
@@ -241,4 +251,5 @@ button:hover {
     background-color: #e6e6e6;
     border-color: #adadad;
 }
+
 </style>
