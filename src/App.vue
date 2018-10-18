@@ -61,7 +61,6 @@
       <img src='https://data.whicdn.com/images/151126798/original.gif' style='min-width:500px; min-height:500px'>
     </div>
   </div>
-  <!--<div></div>-->
 </template>
 
 <script>
@@ -115,7 +114,7 @@
       getRandomWord() {
         let index = Math.random() * (this.wordBank.length - 0)
         index = Math.floor(index)
-        
+        console.log('test')
         let word = this.wordBank[index].name.toUpperCase()
         this.hintRegion = this.wordBank[index].region
         this.hintSubRegion = this.wordBank[index].subregion
