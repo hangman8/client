@@ -277,6 +277,12 @@ export default {
       }
       return null
     },
+    playSound(sound) {
+      if (sound) {
+          let audio = new Audio(sound);
+          audio.play();
+      }
+    },
     backToLoby(){
       localStorage.removeItem('room')
       localStorage.removeItem('userid')
@@ -324,6 +330,11 @@ export default {
   },
   mounted () {
     this.checkUser()
+  },
+  watch: {
+    gameOver() {
+      this.playSound('http://soundbible.com/mp3/Psycho%20Scream-SoundBible.com-1441943673.mp3')
+    }
   },
   created() {
     this.getWordBank()
