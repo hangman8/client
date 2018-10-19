@@ -69,12 +69,16 @@
     </div>
     <!-- end -->
     <div v-if='gameOver'>
-      <h1>{{disuser.username}} Lose!! Loser!</h1>
+      <h1 style="font-family:'Butcherman',cursive">{{disuser.username}} Lose!! Loser!</h1>
       <img src='https://i.pinimg.com/originals/51/47/ce/5147cefed31c3da812e713bb8af1e875.gif' style='min-width:500px; min-height:500px'>
+      <br>
+      <button button type="button" class="btn btn-outline-danger" @click='backToLoby()'>BACK TO LOBBY</button>
     </div>
     <div v-if='winner'>
-      <h1>Congratulation {{disuser.username}} are the Winner!!</h1>
+      <h1 style="font-family:'Butcherman',cursive">Congratulation {{disuser.username}} are the Winner!!</h1>
       <img src='https://data.whicdn.com/images/151126798/original.gif' style='min-width:500px; min-height:500px'>
+      <br>
+      <button button type="button" class="btn btn-outline-danger" @click='backToLoby()'>BACK TO LOBBY</button>
     </div>
   </div>
 </template>
@@ -268,6 +272,14 @@ export default {
       }
       return null
     },
+    backToLoby(){
+      localStorage.removeItem('room')
+      localStorage.removeItem('userid')
+      let ref = database.ref('room/' + this.room)
+      ref.set({})
+      this.$router.push('/')
+    }
+    ,
     getWordBank () {
       let self = this
       axios.get('https://restcountries.eu/rest/v2/all')
