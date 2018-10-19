@@ -353,6 +353,22 @@ export default {
       self.word = word
       self.wordLetters = self.word.split('')
     })
+    database.ref('room/' + localStorage.getItem('room') + '/hintRegion').on('value',function(snapshot){
+     let hintRegion = snapshot.val()
+     self.hintRegion = hintRegion
+   })
+   database.ref('room/' + localStorage.getItem('room') + '/hintSubRegion').on('value',function(snapshot){
+     let hintSubRegion = snapshot.val()
+     self.hintSubRegion = hintSubRegion
+   })
+   database.ref('room/' + localStorage.getItem('room') + '/hintPopulation').on('value',function(snapshot){
+     let hintPopulation = snapshot.val()
+     self.hintPopulation = hintPopulation
+   })
+   database.ref('room/' + localStorage.getItem('room') + '/hintFlag').on('value',function(snapshot){
+     let hintFlag = snapshot.val()
+     self.hintFlag = hintFlag
+   })
   }
 }
 </script>
