@@ -6,7 +6,7 @@
     </ul>
     <div class="col-md-12">
       <input type="text" placeholder="Room" v-model="room"><br>
-      <button @click="setRoom">Check Button</button>
+      <button @click="setRoom">Enter Room</button>
     </div>
   </div>
 </template>
@@ -34,7 +34,8 @@ export default {
             database
               .ref('room/' + self.room)
               .set({
-                name: self.room
+                name: self.room,
+                word: false
               })
               .then(response => {
                 console.log(response)
