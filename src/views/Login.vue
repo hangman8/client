@@ -33,7 +33,7 @@ export default {
           status: 'playing'
         })
           .then(response => {
-            console.log('whoami', response.key)
+            // console.log('whoami', response.key)
             localStorage.setItem('userid', response.key)
           })
         self.username = ''
