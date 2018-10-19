@@ -21,6 +21,12 @@
           <line v-if="strikes > 8" x1="230" y1="140" x2="210" y2="120" style="stroke:yellow;fill:none;stroke-width:2px;" />
           <line v-if="strikes > 9" x1="230" y1="170" x2="250" y2="200" style="stroke:yellow;fill:none;stroke-width:2px;" />
           <line v-if="strikes > 10" x1="230" y1="170" x2="210" y2="200" style="stroke:yellow;fill:none;stroke-width:2px;" />
+          <image v-if="strikes > 5 && strikes < 11" xlink:href="https://www.uni-regensburg.de/Fakultaeten/phil_Fak_II/Psychologie/Psy_II/beautycheck/english/durchschnittsgesichter/m(01-32)_gr.jpg" x="205" y="65" height="50px" width="50px"/>
+          <image v-if="strikes > 6 && strikes < 11" xlink:href="https://i.pinimg.com/originals/53/e7/44/53e7441a38f57786fd8db6f01f93c06b.jpg" x="205" y="95" height="100px" width="50px"/>
+          <image v-if="strikes > 7 && strikes < 11" xlink:href="https://en.pimg.jp/012/423/521/1/12423521.jpg" x="160" y="80" height="50px" width="50px"/>
+          <image v-if="strikes > 8 && strikes < 11" xlink:href="https://cdn-a.william-reed.com/var/wrbm_gb_food_pharma/storage/images/3/2/8/6/1216823-1-eng-GB/Truly-exciting-Probiotic-may-increase-muscle-mass-energy-performance.jpg" x="250" y="95" height="50px" width="50px"/>
+          <image v-if="strikes > 9 && strikes < 11" xlink:href="http://www.ghostride.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/B/P/BP_LEGS-M-LEFT.jpg" x="185" y="179" height="50px" width="50px"/>
+          <image v-if="strikes > 10 && strikes < 11" xlink:href="http://www.ghostride.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/B/P/BP_LEGS-F-LEFT.jpg" x="220" y="179" height="50px" width="50px"/>
         </svg>
         <div>
           <div class="letter" v-if="wordBank.length > 0" v-for="(letter,index) in wordDisplayLetters" :key="index">
@@ -147,13 +153,12 @@ export default {
     initialize() {
       this.initialized = true
       this.strikes = 0
-      this.wordLetters = this.word.split('')
+      // this.wordLetters = this.word.split('')
       this.wordDisplayLetters = Array(this.word.length)
       this.usedLetters = []
       this.correctCounter = 0
     },
-    eraseChar() {
-      let word = this.word
+    eraseChar(word) {
       let alphabet = []
       let trueAlpha = false
       let trueWord = []
@@ -289,26 +294,27 @@ export default {
         index = Math.floor(index)
         if (self.wordBank) {
           let word = self.wordBank[index].name.toUpperCase()
-          this.word = word
-          this.hintRegion = this.wordBank[index].region
-          this.hintSubRegion = this.wordBank[index].subregion
-          this.hintPopulation = this.formatPopulation(this.wordBank[index].population)
-          this.hintFlag = this.wordBank[index].flag
-          this.wordBank.splice(index, 1) // remove the word so it won't be repeated
-          console.log(this.eraseChar(this.word))
+          let hintRegion = self.wordBank[index].region
+          let hintSubRegion = self.wordBank[index].subregion
+          let hintPopulation = self.formatPopulation(self.wordBank[index].population)
+          let hintFlag = self.wordBank[index].flag
+          self.wordBank.splice(index, 1) // remove the word so it won't be repeated          
           let hangroom = database.ref('room/' + self.room)
+          console.log('check', self.eraseChar(word).length)
+          word = self.eraseChar(word)
           hangroom.once('value', function (snapshot) {
           let userarr = snapshot.val().users
-            hangroom.update({
-              word: self.word,
-              users: userarr,
-              hintRegion: self.hintRegion,
-              hintSubRegion: self.hintSubRegion,
-              hintPopulation: self.hintPopulation,
-              hintFlag: self.hintFlag
-            })
+            if (!snapshot.val().word) {
+              hangroom.update({
+                word: word,
+                users: userarr,
+                hintRegion: hintRegion,
+                hintSubRegion: hintSubRegion,
+                hintPopulation: hintPopulation,
+                hintFlag: hintFlag
+              })
+            }
           })
-          return word
         }
       })
       .catch((err) => {
@@ -321,8 +327,6 @@ export default {
   },
   created() {
     this.getWordBank()
-    
-    let self = this
     console.log('created')
     let ref = database.ref('room/' + localStorage.getItem('room') + '/users')
     ref.on('value', function(snapshot) {
@@ -340,6 +344,14 @@ export default {
           self.winner = true
         }
       }
+    })
+    let self = this
+    let hangroom = database.ref('room/' + localStorage.getItem('room') + '/word')
+    hangroom.on('value', function (snapshot) {
+      let word = snapshot.val()
+      console.log('compare 2 browser', word)
+      self.word = word
+      self.wordLetters = self.word.split('')
     })
   }
 }
