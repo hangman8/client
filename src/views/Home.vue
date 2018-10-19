@@ -34,8 +34,7 @@ export default {
             database
               .ref('room/' + self.room)
               .set({
-                name: self.room,
-                word: false
+                name: self.room
               })
               .then(response => {
                 console.log(response)

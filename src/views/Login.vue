@@ -30,8 +30,7 @@ export default {
       } else {
         database.ref('room/' + self.room + '/users').push({
           username: self.username,
-          heart: 5,
-          turn: false
+          status: 'playing'
         })
           .then(response => {
             console.log('whoami', response.key)

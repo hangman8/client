@@ -1,13 +1,13 @@
 <template>
   <div>
-    <div class="col-md-12" style="display: flex">
-      <div class="col-md-6"><h1><span>Heart {{playerinfo1.heart}}</span> Player 1 {{playerinfo1.username}}</h1></div>
-      <div class="col-md-6"><h1>Player 2 {{playerinfo2.username}} <span> Heart {{playerinfo1.heart}}</span></h1></div>
-    </div>
     <!-- start -->
-    <div class="room">
-      <div v-if='!gameOver'>
+    <div v-if='!gameOver'>
       <div v-if='!winner'>
+        <div class="col-md-12" style="display: flex">
+          <div class="col-md-6"><h1>Player 1 {{playerinfo1.username}}</h1></div>
+          <div class="col-md-6"><h1>Player 2 {{playerinfo2.username}}</h1></div>
+        </div>
+        <div class="room">
          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="350px" height="260px" viewBox="0 0 350 275"
           preserveAspectRatio="xMidYMid meet">
           <line v-if="strikes > 0" x1="80" y1="257" x2="260" y2="257" style="stroke:yellow;fill:none;stroke-width:2px;" />
@@ -69,11 +69,11 @@
     </div>
     <!-- end -->
     <div v-if='gameOver'>
-      <h1>You Lose!! Loser!</h1>
+      <h1>{{disuser.username}} Lose!! Loser!</h1>
       <img src='https://i.pinimg.com/originals/51/47/ce/5147cefed31c3da812e713bb8af1e875.gif' style='min-width:500px; min-height:500px'>
     </div>
     <div v-if='winner'>
-      <h1>Congratulation You are the Winner!!</h1>
+      <h1>Congratulation {{disuser.username}} are the Winner!!</h1>
       <img src='https://data.whicdn.com/images/151126798/original.gif' style='min-width:500px; min-height:500px'>
     </div>
   </div>
@@ -113,6 +113,7 @@ export default {
       player2: '',
       playerinfo1: '',
       playerinfo2: '',
+      disuser: ''
     }
   },
   methods: {
@@ -130,8 +131,12 @@ export default {
           self.playerinfo1 = Object.values(userarr)[0]
           self.player2 = Object.keys(userarr)[1]
           self.playerinfo2 = Object.values(userarr)[1]
+          if (self.player1 === localStorage.getItem('userid')) {
+            self.disuser = self.playerinfo1
+          } else {
+            self.disuser = self.playerinfo2
+          }
           self.initialize()
-          console.log(self.playerinfo1.username)
         }
       })
     },
@@ -142,26 +147,7 @@ export default {
       this.wordDisplayLetters = Array(this.word.length)
       this.usedLetters = []
       this.correctCounter = 0
-      let self = this
-      database.ref('room/' + this.room).once('value', function (snapshot) {
-        word.set({
-          word: self.getWordBank()
-        })
-        console.log('apa ini', word)
-      })
     },
-    // getRandomWord() {
-    //   let index = Math.random() * (this.wordBank.length - 0)
-    //   index = Math.floor(index)
-    //   console.log('test')
-    //   this.hintRegion = this.wordBank[index].region
-    //   this.hintSubRegion = this.wordBank[index].subregion
-    //   this.hintPopulation = this.formatPopulation(this.wordBank[index].population)
-    //   this.hintFlag = this.wordBank[index].flag
-    //   this.wordBank.splice(index, 1) // remove the word so it won't be repeated
-    //   console.log(this.eraseChar(word))
-    //   return word
-    // },
     eraseChar() {
       let word = this.word
       let alphabet = []
@@ -221,10 +207,59 @@ export default {
       } 
       if(this.strikes === 11) {
         this.gameOver = true
+        let self = this
+        let userlist = database.ref('room/' + self.room + '/users')
+        userlist.on('value', function (snapshot) {
+          let getStat = snapshot.val()
+          if (localStorage.getItem('userid') === Object.keys(getStat)[0]) {
+            let loser = database.ref('room/' + self.room + '/users/' + Object.keys(getStat)[0])
+            loser.update({
+              status : 'loser'
+            })
+            let winner = database.ref('room/' + self.room + '/users/' + Object.keys(getStat)[1])
+            winner.update({
+              status : 'winner'
+            })
+          } else {
+            let loser = database.ref('room/' + self.room + '/users/' + Object.keys(getStat)[1])
+            loser.update({
+              status : 'loser'
+            })
+            let winner = database.ref('room/' + self.room + '/users/' + Object.keys(getStat)[0])
+            winner.update({
+              status : 'winner'
+            })
+          }
+        })
       }
       if(this.correctCounter === this.wordDisplayLetters.length) {
         this.winner = true
+        let self = this
+        let userlist = database.ref('room/' + self.room + '/users')
+        userlist.on('value', function (snapshot) {
+          let getStat = snapshot.val()
+          if (localStorage.getItem('userid') === Object.keys(getStat)[0]) {
+            let winner = database.ref('room/' + self.room + '/users/' + Object.keys(getStat)[0])
+            winner.update({
+              status : 'winner'
+            })
+            let loser = database.ref('room/' + self.room + '/users/' + Object.keys(getStat)[1])
+            loser.update({
+              status : 'loser'
+            })
+          } else {
+            let winner = database.ref('room/' + self.room + '/users/' + Object.keys(getStat)[1])
+            winner.update({
+              status : 'winner'
+            })
+            let loser = database.ref('room/' + self.room + '/users/' + Object.keys(getStat)[0])
+            loser.update({
+              status : 'loser'
+            })
+          }
+        })
       }
+      self.turnCount++
       console.log(this.wordDisplayLetters.length,'--', this.correctCounter, this.winner)
     },
     getStrikethroughClass(letter) {
@@ -249,6 +284,18 @@ export default {
           this.hintFlag = this.wordBank[index].flag
           this.wordBank.splice(index, 1) // remove the word so it won't be repeated
           console.log(this.eraseChar(this.word))
+          let hangroom = database.ref('room/' + self.room)
+          hangroom.once('value', function (snapshot) {
+          let userarr = snapshot.val().users
+            hangroom.update({
+              word: self.word,
+              users: userarr,
+              hintRegion: self.hintRegion,
+              hintSubRegion: self.hintSubRegion,
+              hintPopulation: self.hintPopulation,
+              hintFlag: self.hintFlag
+            })
+          })
           return word
         }
       })
@@ -262,6 +309,26 @@ export default {
   },
   created() {
     this.getWordBank()
+    
+    let self = this
+    console.log('created')
+    let ref = database.ref('room/' + localStorage.getItem('room') + '/users')
+    ref.on('value', function(snapshot) {
+      var changed = snapshot.val()
+      if (localStorage.getItem('userid') === Object.keys(changed)[0]) {
+        if (Object.values(changed)[0].status === 'loser') {
+          self.gameOver = true
+        } else if (Object.values(changed)[0].status === 'winner') {
+          self.winner = true
+        }
+      } else if (localStorage.getItem('userid') === Object.keys(changed)[1]) {
+        if (Object.values(changed)[1].status === 'loser') {
+          self.gameOver = true
+        } else if (Object.values(changed)[1].status === 'winner') {
+          self.winner = true
+        }
+      }
+    })
   }
 }
 </script>
