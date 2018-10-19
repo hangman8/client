@@ -1,12 +1,23 @@
 <template>
   <div class="home">
-    <h1> List of Room </h1>
-    <ul v-if="roomlist.length > 0">
-      <li v-for="(single, index) in roomlist" :key="index"> {{single}} </li>
-    </ul>
-    <div class="col-md-12">
-      <input type="text" placeholder="Room" v-model="room"><br>
-      <button @click="setRoom">Enter Room</button>
+    <div class="mt-4 mb-5 d-flex align-items-center justify-content-center mr-5">
+      <div id="banner" class="">The Bloody Hangman</div>
+      <img class="mt-3 border rounded-circle bg-warning" id="scarecrow" src="../assets/scarecrow2.png" alt="">
+    </div>
+    <div class="alert mb-0 container col-7" id="alert-subtitle">
+      <h3 id="subtitle">Interested to try a thrilling hangman game? Immediately make a room below!</h3>
+    </div>
+    <div class="d-flex justify-content-center align-items-center mb-4 col-9 m-auto p-3 rounded" id="divroom">
+      <div class="mr-5 d-flex align-items-center">
+        <div class="lead mr-5">Playing Rooms</div> 
+        <i class="fas fa-arrow-circle-right"></i></div>
+      <div class="ml- mr-5" id="listroom" v-if="roomlist.length > 0">
+        <div id="oneroom" v-for="(single, index) in roomlist" :key="index"> {{single}} </div>
+      </div>
+      <div class="col-6">
+      <input type="text" class="form-control" placeholder="Room" v-model="room"><br>
+      <button class="btn btn-outline-dark" id="btn-room" @click="setRoom">Enter Room</button>
+    </div>
     </div>
   </div>
 </template>
@@ -72,13 +83,57 @@ export default {
 
 <style scoped>
 .home {
-  margin: 0 auto;
-  width: 300px;
+  color: rgb(134, 5, 5);
+  background-color: black;
+}
+
+#banner {
+  font-family: 'Butcherman', cursive;
+  font-size: 120px;
+}
+
+#scarecrow {
+  width: 25rem;
+  margin-right: 90px !important;
+  border: 10px solid darkred !important
+}
+
+#subtitle {
+  font-family: 'Oswald', sans-serif;
+  font-size: 21px;
+  color: white;
+}
+
+#alert-subtitle {
+  background-color: rgb(134, 5, 5);
+  border-radius: 0px !important;
+  width: 680px !important;
 }
 
 input, button {
   width: 100%;
   text-align: center;
+}
+
+#oneroom:hover {
+  background-color: #003366;
+}
+
+#divroom {
+  background-color: rgb(134, 5, 5);
+  color: white;
+}
+
+#btn-room {
+  background-color: black;
+  border: none !important;
+  color: white;
+}
+
+#btn-room:hover {
+  background-color: #ffa500;
+  border: none !important;
+  color: white;
 }
 
 ul, li {
